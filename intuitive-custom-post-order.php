@@ -283,6 +283,18 @@ class Hicpo {
 		}
 	}
 
+	public function hicpo_after_post_update( $post_id ) {
+		do_action( 'hicpo/post_updated', $post_id );
+	}
+
+	public function hicpo_after_term_update( $term_id ) {
+		do_action( 'hicpo/term_updated', $term_id );
+	}
+
+	public function hicpo_after_blog_update( $blog_id ) {
+		do_action( 'hicpo/blog_updated', $blog_id );
+	}
+
 	public function hicpo_refresh() {
 		global $wpdb;
 		$objects = $this->hicpo_get_options_objects();
@@ -318,6 +330,7 @@ class Hicpo {
 
 				foreach ( $results as $key => $result ) {
 					$wpdb->update( $wpdb->posts, [ 'menu_order' => $key + 1 ], [ 'ID' => $result->ID ] );
+					$this->hicpo_after_post_update( $result->ID );
 				}
 			}
 		}
@@ -354,6 +367,7 @@ class Hicpo {
 				$results = $wpdb->get_results( $query );
 				foreach ( $results as $key => $result ) {
 					$wpdb->update( $wpdb->terms, [ 'term_order' => $key + 1 ], [ 'term_id' => $result->term_id ] );
+					$this->hicpo_after_term_update( $result->term_id );
 				}
 			}
 		}
@@ -450,6 +464,7 @@ class Hicpo {
 		foreach ( $data as $key => $values ) {
 			foreach ( $values as $position => $id ) {
 				$wpdb->update( $wpdb->posts, [ 'menu_order' => $menu_order_arr[ $position ] ], [ 'ID' => intval( $id ) ] );
+				$this->hicpo_after_post_update( intval( $id ) );
 			}
 		}
 
@@ -490,6 +505,7 @@ class Hicpo {
 			foreach ( $sort_ids as $key => $id ) {
 				$oreder_no = ++$oreder_no;
 				$wpdb->update( $wpdb->posts, [ 'menu_order' => $oreder_no ], [ 'ID' => intval( $id ) ] );
+				$this->hicpo_after_post_update( intval( $id ) );
 			}
 		}
 	}
@@ -540,6 +556,7 @@ class Hicpo {
 		foreach ( $data as $key => $values ) {
 			foreach ( $values as $position => $id ) {
 				$wpdb->update( $wpdb->terms, [ 'term_order' => $menu_order_arr[ $position ] ], [ 'term_id' => intval( $id ) ] );
+				$this->hicpo_after_term_update( intval( $id ) );
 			}
 		}
 
@@ -586,6 +603,7 @@ class Hicpo {
 			foreach ( $sort_ids as $key => $id ) {
 				$oreder_no = ++$oreder_no;
 				$wpdb->update( $wpdb->terms, [ 'term_order' => $oreder_no ], [ 'term_id' => $id ] );
+				$this->hicpo_after_term_update( $id );
 			}
 		}
 	}
@@ -627,6 +645,7 @@ class Hicpo {
 		foreach ( $data as $key => $values ) {
 			foreach ( $values as $position => $id ) {
 				$wpdb->update( $wpdb->blogs, [ 'menu_order' => $position + 1 ], [ 'blog_id' => intval( $id ) ] );
+				$this->hicpo_after_blog_update( intval( $id ) );
 			}
 		}
 	}
@@ -702,6 +721,7 @@ class Hicpo {
 				}
 				foreach ( $results as $key => $result ) {
 					$wpdb->update( $wpdb->posts, [ 'menu_order' => $key + 1 ], [ 'ID' => $result->ID ] );
+					$this->hicpo_after_post_update( $result->ID );
 				}
 			}
 		}
@@ -737,6 +757,7 @@ class Hicpo {
 				$results = $wpdb->get_results( $query );
 				foreach ( $results as $key => $result ) {
 					$wpdb->update( $wpdb->terms, [ 'term_order' => $key + 1 ], [ 'term_id' => $result->term_id ] );
+					$this->hicpo_after_term_update( $result->term_id );
 				}
 			}
 		}
@@ -774,6 +795,7 @@ class Hicpo {
 			);
 			foreach ( $results as $key => $result ) {
 				$wpdb->update( $wpdb->blogs, [ 'menu_order' => $key + 1 ], [ 'blog_id' => $result->blog_id ] );
+				$this->hicpo_after_blog_update( $result->blog_id );
 			}
 		}
 
